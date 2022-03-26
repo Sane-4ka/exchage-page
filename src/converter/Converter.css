@@ -20,20 +20,36 @@
     box-shadow: 5px 5px 10px rgba(0,0,0, .2);
   }
   
-  .counter {
-    /* width: 100px; */
-    /* height: 100px; */
-    border-radius: 5px;
-    box-shadow: 5px 5px 10px rgba(0,0,0, .2);
-    background-color: #e6e6e6;
-    text-align: center;
-    line-height: 100px;
-    font-size: 34px;
-    margin: 10px auto;
-  }
-  
-  .controls {
+  .exch-block {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+  }
+  label {
+      padding: 5px;
+  }
+
+  span {
+    padding: 15px;
+}
+
+  .output {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+
+  .output-text {
+      height: 35px;
+      width: 200px;
+      border: 1px solid #000;
+  }
+
+  .controls {
+    max-width: 400px;
+    display: flex;
+    margin: 0 auto;
     justify-content: space-around;
     margin-top: 40px;
   }

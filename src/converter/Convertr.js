@@ -4,42 +4,79 @@ import './Converter.css';
 const Converter = (props) => {
 
     const getResource = async (url) => {
-        console.log(url);
         let  res =  await fetch(url);
-
         if (!res.ok) {
-            console.log('shit');
+            console.log('shit!!!!!!!!!!!!!');
             throw new Error(`Could not fetch ${url}, status: ${res.status}`);
-        } else {
-            console.log('good');
         }
-        console.log(res);
-        // return res.json(); 
+        return res.json(); 
     }
 
-    const getRate = async (town = 'Брест') => {
-        console.log('1')
-        // const res = await getResource(`https://gateway.marvel.com:443/v1/public/characters?limit=9&offset=300&apikey=0caca179e55b92eb71501e00207d7c5e`);
-        // const res = await getResource(`https://belarusbank.by/api/kursExchange?city=${town}`);
-        const res = await getResource(`https://belarusbank.by/api/kursExchange`);
-        console.log(res)
+
+    const getRate = async (currencyTo = 'USD', currencyFrom = 'USD') => {
+        const res = await getResource(`https://v6.exchangerate-api.com/v6/b47dbf329f46700f9c6c6fa0/latest/${currencyFrom}`);
+        
+        setCurrency(currencyTo)
+        if (currencyFrom === 'USD') {
+            setRate(rate => res.conversion_rates[currencyTo])    
+        } else {
+            setRateBYN(rateBYN => res.conversion_rates[currencyTo]) 
+        }
     }
 
-    // const getRes = () => {
-    //     getResource()
-    // }
+    const [fromUSD, setFromUSD] = useState(1);
+    const [fromBYN, setFromBYN] = useState(1);
+    const [rate, setRate] = useState(0)
+    const [rateBYN, setRateBYN] = useState(0)
+    const [currency, setCurrency] = useState('USD')
+
+    function changeFromUSD(e) {
+        setFromUSD(fromUSD => e)
+    }
+    function changeFromBYN(e) {
+        setFromBYN(fromBYN => e)
+    }
+
+    function onGetRates(currency) {
+        getRate(currency);
+        getRate(currency, 'BYN')
+    }
+    
+    useEffect(() => {
+        onGetRates('BYN')
+    }, []);
 
     return (
-        <div class="app">
-        <div class="counter">Покупка банком по {'ssff'}</div>
-        <div class="counter">Продажа банком за {'ssff'}</div>
-        <div class="controls">
-          <button onClick={() => getRate()}>INC</button>
-          {/* <button onClick={onDecr}>DEC</button> */}
-          {/* <button onClick={onRandom}>RND</button> */}
-          {/* <button onClick={onReset}>RESET</button> */}
+        <div className="app">
+            <div className="exch-block">
+                <div className="inp-block">
+                    <label htmlFor="exch-input">USD</label>
+                    <input type="number" onChange={(e) => changeFromUSD(e.target.value)} min='0' placeholder='enter quantity' defaultValue={fromUSD} />    
+                </div>
+                <span>to {currency}</span>
+                <div className="output">
+                    <span>{fromUSD * rate}</span>
+                </div>
+            </div>
+
+            <div className="exch-block">
+                <div className="inp-block">
+                    <label htmlFor="exch-input">BYN</label>
+                    <input type="number" onChange={(e) => changeFromBYN(e.target.value)} min='0' placeholder='enter quantity' defaultValue={fromBYN} />    
+                </div>
+                <span>to {currency}</span>
+                <div className="output">
+                    <span>{fromBYN * rateBYN}</span>
+                </div>
+            </div>
+
+            <div className="controls">
+            <button onClick={() => onGetRates('BYN')}>BYN</button>
+            <button onClick={() => onGetRates("USD")}>USD</button>
+            <button onClick={() => onGetRates("RUB")}>RUB</button>
+            <button onClick={() => onGetRates("GBP")}>GBP</button>
+            </div>
         </div>
-      </div>
     )
 }
 
