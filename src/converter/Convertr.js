@@ -30,13 +30,6 @@ const Converter = (props) => {
     const [rateBYN, setRateBYN] = useState(0)
     const [currency, setCurrency] = useState('USD')
 
-    function changeFromUSD(e) {
-        setFromUSD(fromUSD => e)
-    }
-    function changeFromBYN(e) {
-        setFromBYN(fromBYN => e)
-    }
-
     function onGetRates(currency) {
         getRate(currency);
         getRate(currency, 'BYN')
@@ -51,22 +44,22 @@ const Converter = (props) => {
             <div className="exch-block">
                 <div className="inp-block">
                     <label htmlFor="exch-input">USD</label>
-                    <input type="number" onChange={(e) => changeFromUSD(e.target.value)} min='0' placeholder='enter quantity' defaultValue={fromUSD} />    
+                    <input type="number" onChange={(e) => setFromUSD(e.target.value)} min='0' placeholder='enter quantity' defaultValue={fromUSD} />    
                 </div>
                 <span>to {currency}</span>
                 <div className="output">
-                    <span>{fromUSD * rate}</span>
+                    <span>{(fromUSD * rate).toFixed(2)}</span>
                 </div>
             </div>
 
             <div className="exch-block">
                 <div className="inp-block">
                     <label htmlFor="exch-input">BYN</label>
-                    <input type="number" onChange={(e) => changeFromBYN(e.target.value)} min='0' placeholder='enter quantity' defaultValue={fromBYN} />    
+                    <input type="number" onChange={(e) => setFromBYN(e.target.value)} min='0' placeholder='enter quantity' defaultValue={fromBYN} />    
                 </div>
                 <span>to {currency}</span>
                 <div className="output">
-                    <span>{fromBYN * rateBYN}</span>
+                    <span>{(fromBYN * rateBYN).toFixed(2)}</span>
                 </div>
             </div>
 
